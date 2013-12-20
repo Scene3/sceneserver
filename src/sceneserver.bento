@@ -1,0 +1,61 @@
+/---------------------
+ -- sceneserver.bento
+ --
+ -- A simple customizable 3D content server.
+ --
+ -- Copyright (c) 2013 by Michael St. Hippolyte
+ --
+ --/
+ 
+site sceneserver [=
+
+    adopt three
+
+
+    /---- scene viewer ----/ 
+
+    three_component(*) scene_viewer(scene sc),(params{}) [=
+        canvas_id = sc.name + "_canvas"
+
+        include_scripts[] = [ "/js/lib/three.js", "/js/lib/stats.js" ]
+    
+        sub_script [|
+            stats = new Stats();
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.top = '0px';
+            stats.domElement.style.left = (canvasWidth - 80) + 'px';
+            [= canvas_container; =].appendChild(stats.domElement);
+        |]
+
+        js_function post_render [=
+            body [|
+                stats.update();
+            |]
+        =]
+
+        log("  >> instantiating scene_viewer with scene " + sc.type);
+            
+    =]        
+
+    /---- pseudofiles ----/
+
+    js [=
+        lib [=
+            three [=
+                js [=
+                    include_file("../3p/lib/three.js");
+                =]
+            =]
+            stats [=
+                js [=
+                    include_file("../3p/lib/stats.min.js");
+                =]
+            =]
+        =]
+    =]
+
+
+
+
+=]
+ 
