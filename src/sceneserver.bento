@@ -17,18 +17,20 @@ site sceneserver [=
 
     /---- scene viewer ----/ 
 
-    /-- component --/ scene_viewer(scene scn),(params{}) [=
+    component scene_viewer(scene scn),(params{}) [=
         width = "100%"
         height = "100%" 
+        
+        scene sc = scn
     
-        three_component(*) scene_component(scene sc) [=
+        three_component(current_scene) scene_component [=
             style  [| position: absolute; top: 0; left: 0;
                       width: 100%; height: 100%; 
                       margin: 0; padding: 0;
                       z-index: 0;
                    |]
         
-            canvas_id = sc.name + "_canvas"
+            canvas_id = current_scene.name + "_canvas"
 
             include_scripts[] = [ "/js/lib/three.js", "/js/lib/stats.js" ]
     
@@ -46,14 +48,13 @@ site sceneserver [=
                |]
             =]
         =]
+        
         with (scn) [=
             eval(current_scene(: scn :));       
         =]
-
- current_scene.name; 
          
         log("  >> instantiating scene_component with scene " + current_scene.name);
-        scene_component(current_scene);
+        scene_component;
 
     =]        
 

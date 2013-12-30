@@ -68,7 +68,7 @@ site sceneserver_example [=
         /-------------------------/
         /---- meta properties ----/
 
-        title = "scenserver example"
+        title = "sceneserver example"
         viewport [| width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0 |]
 
         style [| 
@@ -84,6 +84,9 @@ site sceneserver_example [=
 
       
         scene_viewer(sample_scene);
+        
+        log("    >>> current_scene: " + current_scene.name); 
+        
     =]
 
     test [=
