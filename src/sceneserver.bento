@@ -3,7 +3,7 @@
  --
  -- A simple customizable 3D content server.
  --
- -- Copyright (c) 2013 by Michael St. Hippolyte
+ -- Copyright (c) 2013-2014 by Michael St. Hippolyte
  --
  --/
  
@@ -11,52 +11,49 @@ site sceneserver [=
 
     adopt three
 
-    scene current_scene(scene s) = s
+    global scene global_scene(scene s) = s
+
+    init [=
+        load_config;
+    =]
 
 
+    page(params) sceneserver_basepage(params{}) [=
+        viewport [| width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0 |]
 
-    /---- scene viewer ----/ 
+        style [| 
+            html, body { 
+                width: 100%;
+                height: 100%;
+                min-width: 100%;
+                min-height: 100%;
+                margin: 0;
+                background: black;
+            }
+        |]
 
-    component scene_viewer(scene scn),(params{}) [=
-        width = "100%"
-        height = "100%" 
-        
-        scene sc = current_scene
-    
-        three_component(sc) scene_component [=
-            style  [| position: absolute; top: 0; left: 0;
-                      width: 100%; height: 100%; 
-                      margin: 0; padding: 0;
-                      z-index: 0;
-                   |]
-        
-            canvas_id = sc.name + "_canvas"
-
-            include_scripts[] = [ "/js/lib/three.js", "/js/lib/stats.js" ]
-    
-            sub_script [|
-                stats = new Stats();
-                stats.domElement.style.position = 'absolute';
-                stats.domElement.style.top = '0px';
-                stats.domElement.style.left = (canvasWidth - 80) + 'px';
-                [= canvas_container; =].appendChild(stats.domElement);
-            |]
-
-            js_function post_render [=
-                body [|
-                    stats.update();
-               |]
-            =]
+        scene this_scene [/]
+      
+        if (this_scene) [=
+            scene_viewer(this_scene);
+        =] else [=
+            sub;
         =]
         
-        with (scn) [=
-            eval(current_scene(: scn :));       
-        =]
-         
-        log("  >> instantiating scene_component with scene " + sc.name + "  current_scene: " + current_scene.name);
-        scene_component;
+        
+    
+    =]
+    
+    sceneserver_basepage(params) general_response(path, params{}) [=
+        title [= "sceneserver"; if (this_scene) [= " - "; this_scene.name; =] =] 
 
-    =]        
+        scene this_scene = get_scene_for_path(path)
+
+        /-- we only get here if this_scene returns null --/
+        system_message("Scene " + path + " not found.");    
+    =]
+
+
 
     /---- pseudofiles ----/
 
@@ -74,9 +71,6 @@ site sceneserver [=
             =]
         =]
     =]
-
-
-
 
 =]
  
