@@ -39,9 +39,6 @@ site sceneserver [=
         =] else [=
             sub;
         =]
-        
-        
-    
     =]
     
     sceneserver_basepage(params) general_response(path, params{}) [=
@@ -50,7 +47,11 @@ site sceneserver [=
         scene this_scene = get_scene_for_path(path)
 
         /-- we only get here if this_scene returns null --/
-        system_message("Scene " + path + " not found.");    
+        if (sub) [=
+            sub;
+        =] else [= 
+            system_message("Scene " + path + " not found.");
+        =]    
     =]
 
 

@@ -1,0 +1,45 @@
+/---------------------
+ -- sceneserver_config.bento
+ --
+ -- The runtime configuration module for sceneserver.
+ --
+ -- Copyright (c) 2013-2014 by Michael St. Hippolyte
+ --
+ --/
+ 
+site sceneserver [=
+
+    /** the global configuration of this sceneserver instance **/
+    global sceneserver_config(*) this_config(str) [/]
+
+    config_filename = file_base + "/sceneserver.conf"
+
+    serializable(*) sceneserver_config(str) [=
+        keep: world_path [/]
+        keep: initial_scene_name [/] 
+    =]
+
+    sceneserver_config default_config [=
+        keep: world_path = "worlds/default/"
+        keep: initial_scene_name = "home.scene"
+    =]
+   
+    load_config [=
+        file config_file = file(config_filename)
+        
+        log("looking for config file " + config_file.canonical_path);
+        
+        if (!config_file.exists) [=
+            log("config file not found; using default config");
+            this_config(default_config.serialize);
+            config_file.overwrite(this_config.serialize);
+
+        =] else [=
+            this_config(config_file.contents);
+        =]
+        
+        log("initialized config:");
+        log(this_config.serialize);
+    =]
+
+=]
