@@ -38,8 +38,7 @@ site sceneserver [=
             this_config(config_file.contents);
         =]
         
-        log("initialized config:");
-        log(this_config.serialize);
+        log("initialized config: " + this_config.serialize);
     =]
 
 =]

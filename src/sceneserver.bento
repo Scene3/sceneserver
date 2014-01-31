@@ -15,6 +15,7 @@ site sceneserver [=
 
     init [=
         load_config;
+        log("world path: " + file_base + this_config.world_path);
     =]
 
 
@@ -46,7 +47,7 @@ site sceneserver [=
 
         scene this_scene = get_scene_for_path(path)
 
-        /-- we only get here if this_scene returns null --/
+        /-- we only get here if this_scene returns null (see sceneserver_basepage) --/
         if (sub) [=
             sub;
         =] else [= 

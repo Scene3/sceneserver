@@ -1,0 +1,56 @@
+/---------------------
+ -- sceneserver_mgr.bento
+ --
+ -- The scene manager module for sceneserver.
+ --
+ -- Copyright (c) 2013-2014 by Michael St. Hippolyte
+ --
+ --/
+ 
+site sceneserver [=
+
+    adopt three
+
+    global scene{} scene_cache = {}
+    
+
+    dynamic path_to_name(p) [=
+        if (!p) [=
+            "home";
+        =] else if (p.index_of(" ") >= 0 ||
+                    p.index_of(".") >= 0 ||
+                    p.index_of("/") >= 0) [=
+            "error";
+        =] else [=
+            p;
+        =]
+    =]    
+    
+    dynamic scene get_scene_for_path(path) [=
+        scene_name = path_to_name(path)
+           
+    
+        if (!scene_cache{scene_name}) [=
+            load_scene(scene_name);
+        =]
+
+        scene_cache{scene_name};
+    =]
+    
+    dynamic load_scene(scene_name) [=
+    
+        keep create_scene by scene_name in scene_cache 
+        
+        scene create_scene [[
+            include_file(file_base + this_config.world_path + scene_name +".scene");
+        ]]
+        
+        log("loading scene " + scene_name + " from file");
+        eval(create_scene);
+        if (scene_cache{scene_name}) [=
+            log("scene loaded");
+        =] else [=
+            log("unable to load scene");
+        =]
+    =]    
+=]
