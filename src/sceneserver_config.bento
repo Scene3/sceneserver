@@ -20,8 +20,8 @@ site sceneserver [=
     =]
 
     sceneserver_config default_config [=
-        keep: world_path = "worlds/default/"
-        keep: initial_scene_name = "home.scene"
+        keep: world_path = "worlds/default/home.world"
+        keep: initial_scene_name = "home"
     =]
    
     load_config [=

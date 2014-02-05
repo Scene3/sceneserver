@@ -13,13 +13,26 @@ site sceneserver [=
 
     global scene{} scene_cache = {}
     
+    keep by name in scene_cache: 
+    scene generated_scene(code) [=
+        
+        name = create_scene.name
+        
+        scene create_scene [[
+            code;
+        ]]
+
+        create_scene;
+    =]
+    
 
     dynamic path_to_name(p) [=
+        log("get name for path `" + p + "`");
         if (!p) [=
             "home";
-        =] else if (p.index_of(" ") >= 0 ||
-                    p.index_of(".") >= 0 ||
-                    p.index_of("/") >= 0) [=
+        =] else if (index_of(p, " ") >= 0 ||
+                    index_of(p, ".") >= 0 ||
+                    index_of(p, "/") >= 0) [=
             "error";
         =] else [=
             p;
@@ -28,7 +41,6 @@ site sceneserver [=
     
     dynamic scene get_scene_for_path(path) [=
         scene_name = path_to_name(path)
-           
     
         if (!scene_cache{scene_name}) [=
             load_scene(scene_name);
@@ -37,18 +49,19 @@ site sceneserver [=
         scene_cache{scene_name};
     =]
     
-    dynamic load_scene(scene_name) [=
+    dynamic file_name_for_scene(scene_name) = file_base + this_config.world_path + scene_name + ".scene"
     
-        keep create_scene by scene_name in scene_cache 
+    dynamic load_scene(scene_name) [=
         
-        scene create_scene [[
-            include_file(file_base + this_config.world_path + scene_name +".scene");
-        ]]
-        
+        scene_code = include_file(file_name_for_scene(scene_name))
+
         log("loading scene " + scene_name + " from file");
-        eval(create_scene);
+        log("world path: " + file_base + this_config.world_path);
+        
+        
+        eval(generated_scene(scene_code));
         if (scene_cache{scene_name}) [=
-            log("scene loaded");
+            log("scene loaded: " + scene_cache{scene_name}.name);
         =] else [=
             log("unable to load scene");
         =]
