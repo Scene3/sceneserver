@@ -11,18 +11,18 @@ site sceneserver [=
 
     adopt three
 
+    global world current_world(world w) = w
+
     global scene{} scene_cache = {}
+
+    dynamic load_world(path) [=
+    
+    
+    =]
     
     keep by name in scene_cache: 
-    scene generated_scene(code) [=
+    scene retrieve_scene(name) [=
         
-        name = create_scene.name
-        
-        scene create_scene [[
-            code;
-        ]]
-
-        create_scene;
     =]
     
 
@@ -49,16 +49,10 @@ site sceneserver [=
         scene_cache{scene_name};
     =]
     
-    dynamic file_name_for_scene(scene_name) = file_base + this_config.world_path + scene_name + ".scene"
-    
     dynamic load_scene(scene_name) [=
         
-        scene_code = include_file(file_name_for_scene(scene_name))
+        log("loading scene " + scene_name + " from world");
 
-        log("loading scene " + scene_name + " from file");
-        log("world path: " + file_base + this_config.world_path);
-        
-        
         eval(generated_scene(scene_code));
         if (scene_cache{scene_name}) [=
             log("scene loaded: " + scene_cache{scene_name}.name);
