@@ -11,18 +11,21 @@ site sceneserver [=
 
     adopt three
 
-    global world current_world(world w) = w
+    global bento_domain world_domain(bento_domain w) = w
 
     global scene{} scene_cache = {}
 
     dynamic load_world(path) [=
-    
-    
+        bento_domain load_world_domain = this_domain.child_domain("world", path, "*.world", true)  
+
+        eval(world_domain(: load_world_domain :));    
     =]
     
-    keep by name in scene_cache: 
     scene retrieve_scene(name) [=
-        
+        keep by name in scene_cache:
+        scene instantiate_scene(name) = world_domain.context.construct(name) 
+
+        instantiate_scene(name);        
     =]
     
 
@@ -43,7 +46,7 @@ site sceneserver [=
         scene_name = path_to_name(path)
     
         if (!scene_cache{scene_name}) [=
-            load_scene(scene_name);
+            retrieve_scene(scene_name);
         =]
 
         scene_cache{scene_name};
