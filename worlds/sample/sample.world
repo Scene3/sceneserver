@@ -1,0 +1,58 @@
+/**
+ *  sample.world -- sample world file for use with sceneserver
+ *
+ **/
+
+world sample [=
+
+    adopt three
+
+    scene home [=
+        phong_material blue_material [=
+            undecorated color = 0x3333CC
+        =]
+            
+        mesh(cube_geometry(10, 10, 10), blue_material) blue_cube [=
+            position pos = position(0, 2, 0)
+        =]
+
+        point_light(0xFFFF33) bright_yellow_light [=
+            position pos = position(0, -50, 0)
+        =]
+            
+        point_light(0xFF0000) bright_red_light [=
+            position pos = position(30, 13, 20)
+        =]
+
+        point_light(0x00FF00) bright_green_light [=
+            position pos = position(-30, 13, 20)
+        =]
+
+        point_light(0x5555FF) bright_blue_light [=
+            position pos = position(0, 50, 0)
+        =]
+
+        point_light(0xAAAAAA) soft_white_light [=
+            position pos = position(0, 2, 40)
+        =]
+
+        three_object[] objs = [
+            blue_cube,
+            bright_yellow_light,
+            bright_red_light,
+            bright_green_light,
+            bright_blue_light,
+            soft_white_light
+        ]
+            
+        next_frame [|
+            blue_cube.rotation.x -= 0.01;
+            blue_cube.rotation.y += 0.01;
+            blue_cube.rotation.z -= 0.02;
+        |]
+    =]
+
+=]
+
+
+

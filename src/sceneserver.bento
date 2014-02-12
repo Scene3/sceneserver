@@ -36,8 +36,6 @@ site sceneserver [=
 
         scene this_scene [/]
 
-        log(" this_config.world_path: " + this_config.world_path);
-      
         if (this_scene) [=
             log("viewing this_scene");
             scene_viewer(this_scene);
