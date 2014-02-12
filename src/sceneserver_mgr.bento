@@ -11,9 +11,17 @@ site sceneserver [=
 
     adopt three
 
+    /** Global world model.  All primary scenes are retrieved from this model. **/ 
     global bento_domain world_domain(bento_domain w) = w
 
-    global scene{} scene_cache = {}
+    /** Global cache for external world models.  External scenes may be retrieved from these 
+     *  models and injected into the primary scene.
+     **/
+    global bento_domain{} external_domains = {}
+    
+    /** The primary scene being served in the current session. **/ 
+    scene current_scene(scene s) = s
+
 
     dynamic load_world(path) [=
         bento_domain load_world_domain = this_domain.child_domain("world", path, "*.world", true)  
