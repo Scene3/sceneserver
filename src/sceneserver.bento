@@ -11,12 +11,13 @@ site sceneserver [=
 
     adopt three
 
-    dynamic world_file_path = file_base + this_config.world_path 
+    world_file_path = file_base + this_config.world_path 
+    world_name = this_config.world_name
     
     init [=
         load_config;
-        log("world path: " + world_file_path);
-        load_world(world_file_path);
+        log("world: " + world_name + "  world path: " + world_file_path);
+        load_world(world_name, world_file_path);
     =]
 
 

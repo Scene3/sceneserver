@@ -1,0 +1,12 @@
+/---------------------
+ -- sceneserver_app.bento
+ --
+ -- An abstract model of a sceneserver application. 
+ --
+ -- Copyright (c) 2014 by Michael St. Hippolyte
+ --
+ --/
+ 
+site sceneserver [=
+
+=]

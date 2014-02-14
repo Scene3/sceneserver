@@ -19,21 +19,17 @@ site sceneserver [=
      **/
     global bento_domain{} external_domains = {}
     
-    /** The primary scene being served in the current session. **/ 
-    scene current_scene(scene s) = s
 
-
-    dynamic load_world(path) [=
-        bento_domain load_world_domain = this_domain.child_domain("world", path, "*.world", true)  
+    dynamic load_world(name, path) [=
+        bento_domain load_world_domain = this_domain.child_domain(name, "world", path, "*.world", true)  
 
         eval(world_domain(: load_world_domain :));    
     =]
     
     scene retrieve_scene(name) [=
-        keep by name in scene_cache:
-        scene instantiate_scene(name) = world_domain.context.construct(name) 
+        scene instantiate_scene = world_domain.context.construct(name) 
 
-        instantiate_scene(name);        
+        instantiate_scene;        
     =]
     
 
@@ -53,22 +49,11 @@ site sceneserver [=
     dynamic scene get_scene_for_path(path) [=
         scene_name = path_to_name(path)
     
-        if (!scene_cache{scene_name}) [=
-            retrieve_scene(scene_name);
+        if (!current_scene || current_scene.name != scene_name) [=
+            current_scene(: retrieve_scene(scene_name) :);
+        =] else [=
+            current_scene;
         =]
-
-        scene_cache{scene_name};
     =]
     
-    dynamic load_scene(scene_name) [=
-        
-        log("loading scene " + scene_name + " from world");
-
-        eval(generated_scene(scene_code));
-        if (scene_cache{scene_name}) [=
-            log("scene loaded: " + scene_cache{scene_name}.name);
-        =] else [=
-            log("unable to load scene");
-        =]
-    =]    
 =]
