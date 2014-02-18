@@ -17,13 +17,11 @@ site sceneserver [=
     serializable(*) sceneserver_config(str) [=
         keep: world_name [/]
         keep: world_path [/]
-        keep: initial_scene_name [/] 
     =]
 
     sceneserver_config default_config [=
         keep: world_name = "sample"
         keep: world_path = "worlds/sample/sample.world"
-        keep: initial_scene_name = "home"
     =]
    
     load_config [=

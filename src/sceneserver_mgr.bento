@@ -11,23 +11,33 @@ site sceneserver [=
 
     adopt three
 
+    static SCENE_PATH_PREFIX = "scene/"
+
     /** Global world model.  All primary scenes are retrieved from this model. **/ 
-    global bento_domain world_domain(bento_domain w) = w
+    global bento_domain world_domain(name, path) = this_domain.child_domain(name, "world", path, "*.world", true)
+    global bento_context world_context = world_domain.context
+    global initial_scene_name = world_context.construct("initial_scene_name")
 
     /** Global cache for external world models.  External scenes may be retrieved from these 
      *  models and injected into the primary scene.
      **/
     global bento_domain{} external_domains = {}
     
+    
 
     dynamic load_world(name, path) [=
-        bento_domain load_world_domain = this_domain.child_domain(name, "world", path, "*.world", true)  
+        eval(world_domain(: name, path :));
+        initial_scene_name;
 
-        eval(world_domain(: load_world_domain :));    
+        log("world domain main site: " + world_domain.main_site);
+
+        eval(initial_scene_name(: :));
+        
+        log("world loaded, initial scene is " + initial_scene_name);
     =]
     
-    scene retrieve_scene(name) [=
-        scene instantiate_scene = world_domain.context.construct(name) 
+    dynamic scene retrieve_scene(name) [=
+        scene instantiate_scene = world_context.construct(name) 
 
         instantiate_scene;        
     =]
@@ -35,14 +45,10 @@ site sceneserver [=
 
     dynamic path_to_name(p) [=
         log("get name for path `" + p + "`");
-        if (!p) [=
-            "home";
-        =] else if (index_of(p, " ") >= 0 ||
-                    index_of(p, ".") >= 0 ||
-                    index_of(p, "/") >= 0) [=
-            "error";
+        if (starts_with(p, SCENE_PATH_PREFIX)) [=
+            substring(p, strlen(SCENE_PATH_PREFIX));
         =] else [=
-            p;
+            initial_scene_name;
         =]
     =]    
     

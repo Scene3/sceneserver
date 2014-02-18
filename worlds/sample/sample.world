@@ -6,6 +6,8 @@
 world sample [=
 
     adopt three
+    
+    initial_scene_name = "home"
 
     scene home [=
         phong_material blue_material [=
