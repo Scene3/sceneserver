@@ -21,7 +21,7 @@ site sceneserver [=
     =]
 
 
-    page(params) sceneserver_basepage(params{}) [=
+    page(params) sceneserver_basepage(params{}),(path, params{}) [=
         viewport [| width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0 |]
 
         style [| 
@@ -35,7 +35,7 @@ site sceneserver [=
             }
         |]
 
-        scene this_scene [/]
+        scene this_scene = path ? get_scene_for_path(path) : current_scene
 
         if (this_scene) [=
             log("viewing this_scene");
@@ -48,8 +48,6 @@ site sceneserver [=
     
     sceneserver_basepage(params) general_response(path, params{}) [=
         title [= "sceneserver"; /---- if (this_scene) [= " - "; this_scene.name; =] ----/ =] 
-
-        scene this_scene = get_scene_for_path(path)
 
         /-- we only get here if this_scene returns null (see sceneserver_basepage) --/
         if (sub) [=

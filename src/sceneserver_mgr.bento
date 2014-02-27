@@ -23,21 +23,17 @@ site sceneserver [=
      **/
     global bento_domain{} external_domains = {}
     
-    
 
     dynamic load_world(name, path) [=
-        eval(world_domain(: name, path :));
+        world_domain(: name, path :);
         initial_scene_name;
 
         log("world domain main site: " + world_domain.main_site);
-
-        eval(initial_scene_name(: :));
-        
-        log("world loaded, initial scene is " + initial_scene_name);
+        log("initial scene is " + initial_scene_name);
     =]
     
     dynamic scene retrieve_scene(name) [=
-        scene instantiate_scene = world_context.construct(name) 
+        scene instantiate_scene = world_domain.get(name) 
 
         instantiate_scene;        
     =]
