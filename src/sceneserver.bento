@@ -46,7 +46,7 @@ site sceneserver [=
         =]
     =]
     
-    sceneserver_basepage(params) general_response(path, params{}) [=
+    sceneserver_basepage(*) general_response(path, params{}) [=
         title [= "sceneserver"; /---- if (this_scene) [= " - "; this_scene.name; =] ----/ =] 
 
         /-- we only get here if this_scene returns null (see sceneserver_basepage) --/
