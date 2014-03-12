@@ -35,6 +35,12 @@ site sceneserver [=
             }
         |]
 
+        sub;
+    =]
+    
+    sceneserver_basepage(*) general_response(path, params{}) [=
+        title = "sceneserver"
+
         scene this_scene = path ? get_scene_for_path(path) : current_scene
 
         if (this_scene) [=
@@ -44,18 +50,6 @@ site sceneserver [=
             log("this_scene null");
             sub;
         =]
-    =]
-    
-    sceneserver_basepage(*) general_response(path, params{}) [=
-        title [= "sceneserver"; /---- if (this_scene) [= " - "; this_scene.name; =] ----/ =] 
-
-        /-- we only get here if this_scene returns null (see sceneserver_basepage) --/
-        if (sub) [=
-            /--- sub; ---/
-            system_message("sub");
-        =] else [= 
-            system_message("Scene " + path + " not found.");
-        =]    
     =]
 
     component system_message(msg) [=
