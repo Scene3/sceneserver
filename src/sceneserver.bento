@@ -37,19 +37,23 @@ site sceneserver [=
 
         sub;
     =]
+
+    /** request base class **/
+    req(nm) [=
+        name = nm
+    =]
     
-    sceneserver_basepage(*) general_response(path, params{}) [=
+    /-- request types --/
+    
+    req(*) scene_req(nm) [/]
+    req(*) agent_req(nm) [/]
+    req(*) prop_req(nm) [/]
+    req("[INFO]") info_req(params{}) [/]    
+
+    
+    response general_response(path, params{}) [=
         title = "sceneserver"
 
-        scene this_scene = path ? get_scene_for_path(path) : current_scene
-
-        if (this_scene) [=
-            log("viewing this_scene");
-            scene_viewer(this_scene);
-        =] else [=
-            log("this_scene null");
-            sub;
-        =]
     =]
 
     component system_message(msg) [=
