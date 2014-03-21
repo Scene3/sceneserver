@@ -41,13 +41,20 @@ site sceneserver [=
     /** request base class **/
     req(nm) [=
         name = nm
+        dynamic get [?]
     =]
     
     /-- request types --/
     
-    req(*) scene_req(nm) [/]
-    req(*) agent_req(nm) [/]
-    req(*) prop_req(nm) [/]
+    req(*) scene_req(nm) [=
+        dynamic get = get_scene(name)
+    =]
+    req(*) agent_req(nm) [=
+        dynamic get = get_agent(name)
+    =]
+    req(*) prop_req(nm) [=
+        dynamic get = get_prop(name)
+    =]
     req("[INFO]") info_req(params{}) [/]    
 
     
