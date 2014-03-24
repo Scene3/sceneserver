@@ -39,6 +39,10 @@ site sceneserver [=
         =]
         
         log("initialized config: " + this_config.serialize);
+        
+        if (!this_config.world_name || !this_config.world_path) [=
+            redirect error_page("Invalid configuration file.")
+        =]
     =]
 
 =]

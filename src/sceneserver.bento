@@ -49,18 +49,52 @@ site sceneserver [=
     req(*) scene_req(nm) [=
         dynamic get = get_scene(name)
     =]
+    
     req(*) agent_req(nm) [=
         dynamic get = get_agent(name)
     =]
+    
     req(*) prop_req(nm) [=
         dynamic get = get_prop(name)
     =]
-    req("[INFO]") info_req(params{}) [/]    
+
+    req(*) page_req(nm) [=
+        dynamic get = get_page(name)
+    =]
+        
+    req("[INFO]") info_req(info) [=
+        get = info
+    =]    
+
+    /-- request constructor table --/
+
+    req req_constructor{} = { "scene": scene_req, "agent": agent_req, "prop": prop_req,
+                              "page" : page_req
+                            } 
 
     
     response general_response(path, params{}) [=
         title = "sceneserver"
 
+        dynamic req req_for_path [=
+            int ix = index_of(path, "/")
+            req_type = (ix < 0 ? path : substring(path, 0, ix))
+            req_name = (ix > 0 && ix + 1 < strlen(path) ? substring(path, ix + 1) : "")
+
+            req rc = req_constructor{req_type} 
+            
+            if (rc && req_name) [=
+                rc(req_name);
+            =] else if (req_type) [=
+                info_req("don't know how to handle " + req_type);
+            =]
+        =]
+
+        req r = req_for_path
+        
+        "<h2>";
+        r.get;
+        "</h2>";
     =]
 
     component system_message(msg) [=
@@ -68,6 +102,27 @@ site sceneserver [=
         msg;
         [| </b> |]
     =]   
+
+
+    /---- object retrieval functons ----/ 
+
+    dynamic get_scene(name) [=
+        ("~~== scene " + (name ? name : "bbhphhhtt") + " ==~~");    
+    =]
+
+    dynamic get_agent(name) [=
+        ("~~== agent " + (name ? name : "bbhphhhtt") + " ==~~");    
+    =]
+
+    dynamic get_prop(name) [=
+        ("~~== prop " + (name ? name : "bbhphhhtt") + " ==~~");    
+    =]
+
+    dynamic get_page(name) [=
+        ("~~== page " + (name ? name : "bbhphhhtt") + " ==~~");    
+    =]
+
+
 
 
     /---- pseudofiles ----/
