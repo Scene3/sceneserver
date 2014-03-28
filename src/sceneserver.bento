@@ -41,29 +41,29 @@ site sceneserver [=
     /** request base class **/
     req(nm) [=
         name = nm
-        dynamic get [?]
+        sub;
     =]
     
     /-- request types --/
     
     req(*) scene_req(nm) [=
-        dynamic get = get_scene(name)
+        get_scene(name);
     =]
     
     req(*) agent_req(nm) [=
-        dynamic get = get_agent(name)
+        get_agent(name);
     =]
     
     req(*) prop_req(nm) [=
-        dynamic get = get_prop(name)
+        get_prop(name);
     =]
 
     req(*) page_req(nm) [=
-        dynamic get = get_page(name)
+        get_page(name);
     =]
         
     req("[INFO]") info_req(info) [=
-        get = info
+        info;
     =]    
 
     /-- request constructor table --/
@@ -87,14 +87,21 @@ site sceneserver [=
                 rc(req_name);
             =] else if (req_type) [=
                 info_req("don't know how to handle " + req_type);
+            =] else [=
+                info_req("request is empty");
             =]
         =]
 
         req r = req_for_path
         
-        "<h2>";
-        r.get;
-        "</h2>";
+        
+        if (r) [=
+            "<h2>";
+            r;
+            "</h2>";
+        =] else [=
+            "Unrecognized request";
+        =]
     =]
 
     component system_message(msg) [=
