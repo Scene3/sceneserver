@@ -72,6 +72,10 @@ site sceneserver [=
                               "page" : page_req
                             } 
 
+    response index(params{}) [=
+        general_response("scene/home", params);
+    =]
+    
     
     response general_response(path, params{}) [=
         title = "sceneserver"
