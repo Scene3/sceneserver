@@ -11,6 +11,11 @@ site sceneserver [=
 
     adopt three
 
+    int major_version = 0
+    int minor_version = 1
+
+    version = major_version + "." + minor_version
+
     world_file_path = file_base + this_config.world_path 
     world_name = this_config.world_name
     
@@ -38,81 +43,94 @@ site sceneserver [=
         sub;
     =]
 
-    /** request base class **/
-    req(nm) [=
-        name = nm
-        sub;
+    /** sceneserver request base class **/
+    req [=
+       name [?]
     =]
     
     /-- request types --/
     
-    req(*) scene_req(nm) [=
-        get_scene(name);
-    =]
-    
-    req(*) agent_req(nm) [=
-        get_agent(name);
-    =]
-    
-    req(*) prop_req(nm) [=
-        get_prop(name);
+    req scene_req [=
+        name = "scene"
     =]
 
-    req(*) page_req(nm) [=
-        get_page(name);
+    req agent_req [=
+        name = "agent";
+    =]
+    
+    req prop_req [=
+        name = "prop";
+    =]
+
+    req page_req [=
+        name = "page";
     =]
         
-    req("[INFO]") info_req(info) [=
-        info;
+    req info_req [=
+        name = "info";
+        info = "Sceneserver " + version + "<br>Open server for multiuser, interconnected 3D content."
     =]    
 
     /-- request constructor table --/
+    req[] supported_reqs = [ scene_req, agent_req, prop_req, info_req, page_req ] 
+    req{} req_types = { for req r in supported_reqs [=
+                            r.name: r
+                        =]
+                      }
 
-    req req_constructor{} = { "scene": scene_req, "agent": agent_req, "prop": prop_req,
-                              "page" : page_req
-                            } 
-
-    response index(params{}) [=
-        general_response("scene/home", params);
+    response index(request r) [=
+        general_response("scene/home", r);
     =]
+   
     
-    
-    response general_response(path, params{}) [=
+    response general_response(r_name, request r) [=
         title = "sceneserver"
 
-        dynamic req req_for_path [=
-            int ix = index_of(path, "/")
-            req_type = (ix < 0 ? path : substring(path, 0, ix))
-            req_name = (ix > 0 && ix + 1 < strlen(path) ? substring(path, ix + 1) : "")
-
-            req rc = req_constructor{req_type} 
+        path = r.path_info
+        npath = (starts_with(path, "/") ? substring(path, 1) : path)
             
-            if (rc && req_name) [=
-                rc(req_name);
-            =] else if (req_type) [=
-                info_req("don't know how to handle " + req_type);
-            =] else [=
-                info_req("request is empty");
-            =]
-        =]
+        int ix = last_index_of(npath, "/")
+        rname = (ix < 0 ? npath : substring(npath, ix + 1))
+        rtype = (ix > 0 ? substring(npath, 0, ix) : "")
 
-        req r = req_for_path
-        
-        
-        if (r) [=
-            "<h2>";
-            r;
-            "</h2>";
-        =] else [=
-            "Unrecognized request";
-        =]
+        req rq = req_types{rtype}
+
+        handle_request(rq, rname);
     =]
+    
+    
+    dynamic handle_request(scene_req scene_rq, nm),
+                          (agent_req agent_rq, nm),
+                          (prop_req prop_rq, nm),
+                          (page_req page_rq, nm),
+                          (info_req info_rq, nm),
+                          (req unhandled_rq, nm) [=
 
-    component system_message(msg) [=
-        [| <b> |]
-        msg;
-        [| </b> |]
-    =]   
+        with (scene_rq) [=
+            get_scene(nm);
+
+        =] else with (agent_rq) [=
+            get_agent(nm);
+
+        =] else with (prop_rq) [=
+            get_prop(nm);
+
+        =] else with (page_rq) [=
+            get_page(nm);
+
+        =] else [=
+            [| <h2> |]
+            with (info_rq) [=
+                info_rq.info;
+            =] else if (unhandled_rq.name) [=
+                "Don't know how to handle request for ";
+                unhandled_rq.name;
+            =] else [=
+                "Empty or unrecognized request";
+            =]
+            [| </h2> |]
+        =]             
+    =]
 
 
     /---- object retrieval functons ----/ 
