@@ -46,29 +46,34 @@ site sceneserver [=
     /** sceneserver request base class **/
     req [=
        name [?]
+       get(nm) [| Unrecognized request. |]
     =]
     
     /-- request types --/
     
     req scene_req [=
         name = "scene"
+        get(nm) = get_scene(nm)
     =]
 
     req agent_req [=
         name = "agent";
+        get(nm) = get_agent(nm)
     =]
     
     req prop_req [=
         name = "prop";
+        get(nm) = get_prop(nm)
     =]
 
     req page_req [=
         name = "page";
+        get(nm) = get_page(nm)
     =]
         
     req info_req [=
         name = "info";
-        info = "Sceneserver " + version + "<br>Open server for multiuser, interconnected 3D content."
+        get(nm) = "<h2>Sceneserver " + version + "<br>Open server for multiuser, interconnected 3D content.</h2>"
     =]    
 
     /-- request constructor table --/
@@ -95,42 +100,10 @@ site sceneserver [=
 
         req rq = req_types{rtype}
 
-        handle_request(rq, rname);
+        rq.get(rname);
     =]
     
     
-    dynamic handle_request(scene_req scene_rq, nm),
-                          (agent_req agent_rq, nm),
-                          (prop_req prop_rq, nm),
-                          (page_req page_rq, nm),
-                          (info_req info_rq, nm),
-                          (req unhandled_rq, nm) [=
-
-        with (scene_rq) [=
-            get_scene(nm);
-
-        =] else with (agent_rq) [=
-            get_agent(nm);
-
-        =] else with (prop_rq) [=
-            get_prop(nm);
-
-        =] else with (page_rq) [=
-            get_page(nm);
-
-        =] else [=
-            [| <h2> |]
-            with (info_rq) [=
-                info_rq.info;
-            =] else if (unhandled_rq.name) [=
-                "Don't know how to handle request for ";
-                unhandled_rq.name;
-            =] else [=
-                "Empty or unrecognized request";
-            =]
-            [| </h2> |]
-        =]             
-    =]
 
 
     /---- object retrieval functons ----/ 
