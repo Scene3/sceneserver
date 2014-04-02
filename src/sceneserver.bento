@@ -88,7 +88,7 @@ site sceneserver [=
     =]
    
     
-    response general_response(r_name, request r) [=
+    dynamic response general_response(r_name, request r) [=
         title = "sceneserver"
 
         path = r.path_info
