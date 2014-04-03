@@ -11,8 +11,6 @@ site sceneserver [=
 
     adopt three
 
-    static SCENE_PATH_PREFIX = "scene/"
-
     /** Global world model.  All primary scenes are retrieved from this model. **/ 
     global bento_domain world_domain(name, path) = this_domain.child_domain(name, "world", path, "*.world", true)
     global bento_context world_context = world_domain.context
@@ -23,7 +21,7 @@ site sceneserver [=
      **/
     global bento_domain{} external_domains = {}
     
-
+    /** Initialization of global world model. **/
     dynamic load_world(name, path) [=
         world_domain(: name, path :);
         initial_scene_name;
@@ -31,31 +29,13 @@ site sceneserver [=
         log("world domain main site: " + world_domain.main_site);
         log("initial scene is " + initial_scene_name);
     =]
-    
-    dynamic scene retrieve_scene(name) [=
-        scene instantiate_scene = world_domain.get(name) 
+
+    /** Scene retrieval. **/    
+    dynamic scene get_scene(name) [=
+        scene_name = name ? name : initial_scene_name
+        scene instantiate_scene = world_domain.get(scene_name) 
 
         instantiate_scene;        
-    =]
-    
-
-    dynamic path_to_name(p) [=
-        log("get name for path `" + p + "`");
-        if (starts_with(p, SCENE_PATH_PREFIX)) [=
-            substring(p, strlen(SCENE_PATH_PREFIX));
-        =] else [=
-            initial_scene_name;
-        =]
-    =]    
-    
-    dynamic scene get_scene_for_path(path) [=
-        scene_name = path_to_name(path)
-    
-        if (!current_scene || current_scene.name != scene_name) [=
-            current_scene(: retrieve_scene(scene_name) :);
-        =] else [=
-            current_scene;
-        =]
     =]
     
 =]

@@ -103,14 +103,11 @@ site sceneserver [=
         rq.get(rname);
     =]
     
-    
+   
 
 
     /---- object retrieval functons ----/ 
 
-    dynamic get_scene(name) [=
-        ("~~== scene " + (name ? name : "bbhphhhtt") + " ==~~");    
-    =]
 
     dynamic get_agent(name) [=
         ("~~== agent " + (name ? name : "bbhphhhtt") + " ==~~");    
@@ -123,8 +120,6 @@ site sceneserver [=
     dynamic get_page(name) [=
         ("~~== page " + (name ? name : "bbhphhhtt") + " ==~~");    
     =]
-
-
 
 
     /---- pseudofiles ----/
