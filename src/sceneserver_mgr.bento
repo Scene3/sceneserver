@@ -31,11 +31,43 @@ site sceneserver [=
     =]
 
     /** Scene retrieval. **/    
-    dynamic scene get_scene(name) [=
-        scene_name = name ? name : initial_scene_name
-        scene instantiate_scene = world_domain.get(scene_name) 
+    dynamic scene get_scene(nm) = retrieved_scene(nm)
+    
+    scene retrieved_scene(nm) [=
+        keep: scene_name(n) = n
+        keep: next_frame = world_domain.get(scene_name + ".next_frame")
+        keep: three_object objs[] = world_domain.get(scene_name + ".objs")
+        keep: camera cam = world_domain.get(scene_name + ".cam")
+        keep: aspect_ratio = world_domain.get(scene_name + ".aspect_ratio")
+        keep: scripts[] = world_domain.get(scene_name + ".scripts")
+        keep: instantiated_scene = world_domain.get(scene_name)
 
-        instantiate_scene;        
+        name = scene_name
+
+        dynamic init_scene(scene_nm) [=
+            scene_name(: scene_nm :);
+            next_frame;
+            objs;
+            cam;
+            aspect_ratio;
+            scripts;
+        =]
+
+
+        with (nm) [=
+            eval(init_scene(nm));
+            log("retrieved scene initialized to " + scene_name);
+        =]
+        
+        if (!scene_name) [=
+            redirect scene_not_specified_error(here)
+        =]
+        
+        if (!instantiated_scene) [=
+            redirect scene_not_found_error(here)
+        =]
+        
+        instantiated_scene;
     =]
     
 =]

@@ -84,14 +84,15 @@ site sceneserver [=
                       }
 
     response index(request r) [=
-        general_response("scene/home", r);
+        log("  ---> initial_scene_name: " + initial_scene_name);
+        scene_viewer(initial_scene_name);
     =]
    
     
-    dynamic response general_response(r_name, request r) [=
+    dynamic response general_response(r_path),(r_name, request r) [=
         title = "sceneserver"
 
-        path = r.path_info
+        path = (r_path ? r_path : r.path_info)
         npath = (starts_with(path, "/") ? substring(path, 1) : path)
             
         int ix = last_index_of(npath, "/")
@@ -103,7 +104,21 @@ site sceneserver [=
         rq.get(rname);
     =]
     
-   
+
+    /---- error pages ----/
+    
+    page error_page(msg, ctx) [=
+        [| <h2>Error: /]            
+        msg;
+        [| </h2> |]
+        
+        with (ctx) [=
+            ctx;
+        =]
+    =]   
+
+    error_page("No scene specified.", ctx) scene_not_specified_error(ctx) [/]
+    error_page("Scene not found.", ctx) scene_not_found_error(ctx) [/]   
 
 
     /---- object retrieval functons ----/ 
