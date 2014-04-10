@@ -44,11 +44,14 @@ site sceneserver [=
                |]
             =]
         =]
-        
+
+   /------        
         if (!current_scene) [=
             redirect scene_not_specified_error(here)
-        =]
-         
+        =]  -----/
+        
+        current_scene;
+current_scene.name;         
         log("  >> instantiating scene_component with current_scene " + current_scene.name);
         scene_component(current_scene);
     =]        
