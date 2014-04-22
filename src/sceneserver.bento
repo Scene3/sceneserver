@@ -84,7 +84,6 @@ site sceneserver [=
                       }
 
     response index(request r) [=
-        log("  ---> initial_scene_name: " + initial_scene_name);
         scene_viewer(initial_scene_name);
     =]
    

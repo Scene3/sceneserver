@@ -33,7 +33,7 @@ site sceneserver [=
     /** Scene retrieval. **/    
     dynamic scene get_scene(nm) = retrieved_scene(nm)
     
-    scene retrieved_scene(nm) [=
+    keep: scene retrieved_scene(nm) [=
         keep: scene_name(n) = n
         keep: next_frame = world_domain.get(scene_name + ".next_frame")
         keep: three_object objs[] = world_domain.get(scene_name + ".objs")

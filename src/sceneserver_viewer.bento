@@ -13,11 +13,11 @@ site sceneserver [=
 
      /---- scene viewer ----/ 
 
-    component scene_viewer(scene_name),(params{}) [=
+    dynamic component scene_viewer(scene_name),(params{}) [=
         width = "100%"
         height = "100%" 
         
-        keep: scene current_scene = get_scene(scene_name)
+        keep: scene current_scene = retrieved_scene(scene_name)
 
         three_component(*) scene_component(scene s) [=
             style  [| position: absolute; top: 0; left: 0;
@@ -43,15 +43,14 @@ site sceneserver [=
                     stats.update();
                |]
             =]
+            log("    >>> in scene_component with scene " + s.name);
+            
         =]
 
-   /------        
         if (!current_scene) [=
             redirect scene_not_specified_error(here)
-        =]  -----/
+        =]
         
-        current_scene;
-current_scene.name;         
         log("  >> instantiating scene_component with current_scene " + current_scene.name);
         scene_component(current_scene);
     =]        
