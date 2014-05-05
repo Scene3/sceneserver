@@ -13,11 +13,11 @@ site sceneserver [=
 
      /---- scene viewer ----/ 
 
-    dynamic component scene_viewer(scene_name),(params{}) [=
+    dynamic component scene_viewer(scene_nm),(params{}) [=
         width = "100%"
         height = "100%" 
         
-        keep: scene current_scene = retrieved_scene(scene_name)
+        keep: scene current_scene = retrieved_scene(scene_nm)
 
         three_component(*) scene_component(scene s) [=
             style  [| position: absolute; top: 0; left: 0;
@@ -56,4 +56,3 @@ site sceneserver [=
     =]        
 
 =]
- 

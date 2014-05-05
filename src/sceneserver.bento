@@ -20,6 +20,7 @@ site sceneserver [=
     world_name = this_config.world_name
     
     init [=
+        three.set_logging_level(three.LOG_DEBUG);
         load_config;
         log("world: " + world_name + "  world path: " + world_file_path);
         load_world(world_name, world_file_path);
@@ -86,7 +87,6 @@ site sceneserver [=
     response index(request r) [=
         scene_viewer(initial_scene_name);
     =]
-   
     
     dynamic response general_response(r_path),(r_name, request r) [=
         title = "sceneserver"
