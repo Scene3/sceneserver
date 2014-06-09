@@ -23,7 +23,7 @@ site sceneserver [=
         three.set_logging_level(three.LOG_DEBUG);
         load_config;
         log("world: " + world_name + "  world path: " + world_file_path);
-        load_world(world_name, world_file_path);
+        load_main_world(world_name, world_file_path);
     =]
 
 
