@@ -14,7 +14,9 @@ world sample [=
             undecorated color = 0x3333CC
         =]
             
-        mesh(cube_geometry(10, 10, 10), blue_material) blue_cube [=
+        mesh blue_cube [=
+            geometry geo = cube_geometry(10, 10, 10)
+            material mat = blue_material
             position pos = position(0, 2, 0)
         =]
 

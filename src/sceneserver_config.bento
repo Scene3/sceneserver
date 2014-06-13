@@ -12,8 +12,6 @@ site sceneserver [=
     /** the global configuration of this sceneserver instance **/
     global sceneserver_config(*) this_config(str) [/]
 
-    config_filename = file_base + "/sceneserver.conf"
-
     serializable(*) sceneserver_config(str) [=
         keep: world_name [/]
         keep: world_path [/]
@@ -24,8 +22,8 @@ site sceneserver [=
         keep: world_path = "worlds/sample/sample.world"
     =]
    
-    load_config [=
-        file config_file = file(config_filename)
+    load_config(filename) [=
+        file config_file = file(filename)
         
         log("looking for config file " + config_file.canonical_path);
         

@@ -16,14 +16,16 @@ site sceneserver [=
 
     version = major_version + "." + minor_version
 
+    config_filename = file_base + "/sceneserver.conf"
+
     world_file_path = file_base + this_config.world_path 
     world_name = this_config.world_name
     
     init [=
         three.set_logging_level(three.LOG_DEBUG);
-        load_config;
-        log("world: " + world_name + "  world path: " + world_file_path);
-        load_main_world(world_name, world_file_path);
+        load_config(config_filename);
+        load_world(world_name, world_file_path);
+        set_main_world(world_name);
     =]
 
 

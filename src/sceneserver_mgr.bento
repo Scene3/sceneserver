@@ -38,8 +38,7 @@ site sceneserver [=
         add_domain(domain_from_file(name, path));
     =]
     
-    dynamic load_main_world(name, path) [=
-        load_world(name, path);
+    dynamic set_main_world(name) [=
         world_domain_name(: name :);
         world_domain;
         initial_scene_name;
