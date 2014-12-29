@@ -19,11 +19,9 @@ site sceneserver [=
     /** Global main world name  **/
     global world_domain_name(nm) = nm
 
-
-    keep by domain_name in all_domains:
-    dynamic bento_domain add_domain(bento_domain dom) [=
-        domain_name = dom.name
-        dom;
+    dynamic bento_domain add_domain(domain_name, bento_domain dom) [=
+        keep by domain_name in all_domains: bento_domain new_domain = dom
+        new_domain;
     =]
 
     /** Global world model.  All primary scenes are retrieved from this model. **/ 
@@ -35,7 +33,7 @@ site sceneserver [=
     dynamic bento_domain domain_from_file(name, path) = this_domain.child_domain(name, "world", path, "*.world", true)
 
     dynamic load_world(name, path) [=
-        add_domain(domain_from_file(name, path));
+        add_domain(name, domain_from_file(name, path));
     =]
     
     dynamic set_main_world(name) [=
