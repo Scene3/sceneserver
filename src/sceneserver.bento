@@ -18,7 +18,7 @@ site sceneserver [=
 
     config_filename = file_base + "/sceneserver.conf"
 
-    world_file_path = file_base + this_config.world_path 
+    world_file_path = file_base + "/" + this_config.world_path 
     world_name = this_config.world_name
     
     init [=
