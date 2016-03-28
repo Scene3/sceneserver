@@ -22,6 +22,8 @@ world sample [=
         geometry geo = box_geometry(10, 10, 10)
         material mat = blue_material
         position pos = position(0, 2, 0)
+        
+        boolean is_pointable = true
     =]
 
     

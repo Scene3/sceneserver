@@ -50,12 +50,12 @@ site sceneserver [=
     
     keep: scene retrieved_scene(nm) [=
         keep: scene_name(n) = n
-        keep: next_frame = world_domain.get(scene_name + ".next_frame")
-        keep: three_object objs[] = world_domain.get_array(scene_name + ".objs")
+        keep: next_frame = world_domain.get_instance(scene_name + ".next_frame")
+        keep: three_object objs[] = world_domain.get_instance(scene_name + ".objs")
         keep: camera cam = world_domain.get_instance(scene_name + ".cam")
-        keep: aspect_ratio = world_domain.get(scene_name + ".aspect_ratio")
-        keep: scripts[] = world_domain.get_array(scene_name + ".scripts")
-        keep: instantiated_scene = world_domain.get(scene_name)
+        keep: aspect_ratio = world_domain.get_instance(scene_name + ".aspect_ratio")
+        keep: scripts[] = world_domain.get_instance(scene_name + ".scripts")
+        keep: instantiated_scene = world_domain.get_instance(scene_name)
 
         name = scene_name
 

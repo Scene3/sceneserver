@@ -53,6 +53,12 @@ site sceneserver [=
         
         log("  >> instantiating scene_component with current_scene " + current_scene.name);
         scene_component(current_scene);
+        
+        log("        >>> pointable objects: ");
+        for three_object o in current_scene.pointable_objs [=
+            log("            ..." + o.name);
+        =]
+            
     =]        
 
 =]
