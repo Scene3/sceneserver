@@ -1,5 +1,5 @@
 /---------------------
- -- sceneserver_app.bento
+ -- sceneserver_app.fun
  --
  -- An abstract model of a sceneserver application. 
  --
@@ -7,6 +7,6 @@
  --
  --/
  
-site sceneserver [=
+site sceneserver {
 
-=]
+}

@@ -1,5 +1,5 @@
 /---------------------
- -- sceneserver_viewer.bento
+ -- sceneserver_viewer.fun
  --
  -- The base UI module for sceneserver.
  --
@@ -7,19 +7,19 @@
  --
  --/
  
-site sceneserver [=
+site sceneserver {
 
     adopt three
 
      /---- scene viewer ----/ 
 
-    dynamic component scene_viewer(scene_nm),(params{}) [=
+    component scene_viewer(scene_nm),(params{}) {
         width = "100%"
         height = "100%" 
         
         keep: scene current_scene = retrieved_scene(scene_nm)
 
-        three_component(*) scene_component(scene s) [=
+        three_component(*) scene_component(scene s) {
             style  [| position: absolute; top: 0; left: 0;
                       width: 100%; height: 100%; 
                       margin: 0; padding: 0;
@@ -35,30 +35,31 @@ site sceneserver [=
                 stats.domElement.style.position = 'absolute';
                 stats.domElement.style.top = '0px';
                 stats.domElement.style.left = (canvasWidth - 80) + 'px';
-                [= canvas_container; =].appendChild(stats.domElement);
+                {= canvas_container; =}.appendChild(stats.domElement);
             |]
 
-            js_function post_render [=
+            js_function post_render {
                 body [|
                     stats.update();
                |]
-            =]
+            }
             log("    >>> in scene_component with scene " + s.name);
+            log("    >>> run_scripts_on_load = " + run_scripts_on_load);
             
-        =]
+        }
 
-        if (!current_scene) [=
+        if (!current_scene) {
             redirect scene_not_specified_error(here)
-        =]
+        }
         
         log("  >> instantiating scene_component with current_scene " + current_scene.name);
         scene_component(current_scene);
         
         log("        >>> pointable objects: ");
-        for three_object o in current_scene.pointable_objs [=
+        for three_object o in current_scene.pointable_objs {
             log("            ..." + o.name);
-        =]
+        }
             
-    =]        
+    }        
 
-=]
+}

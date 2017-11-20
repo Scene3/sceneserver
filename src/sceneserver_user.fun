@@ -1,5 +1,5 @@
 /---------------------
- -- sceneserver_user.bento
+ -- sceneserver_user.fun
  --
  -- A representation of a sceneserver user. 
  --
@@ -7,20 +7,20 @@
  --
  --/
  
-site sceneserver [=
+site sceneserver {
 
-    subject [=
+    subject {
         boolean is_authenticated [&]
         boolean authenticate(username, password) [&]            
-    =]
+    }
     
     
     
-    subject user [=
+    subject user {
         name [/]
         
     
-    =]
+    }
 
 
-=]
+}

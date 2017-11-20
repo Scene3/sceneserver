@@ -5,5 +5,5 @@
 
 SERVICE_HOME=$PWD
 SERVICE_NAME="sceneserver"
-BENTO_HOME="../bentolang"
-source ../bentolang/bin/bentoserver.sh
+FUN_HOME="../funlang"
+source ../funlang/bin/funserver.sh

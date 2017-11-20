@@ -1,5 +1,5 @@
 /---------------------
- -- sceneserver_session.bento
+ -- sceneserver_session.fun
  --
  -- Session logic for sceneserver.
  --
@@ -7,7 +7,7 @@
  --
  --/
  
-site sceneserver [=
+site sceneserver {
 
     adopt three
 
@@ -17,4 +17,4 @@ site sceneserver [=
     /** The user in the current session. **/
     user current_user(user u) = u
 
-=]
+}
