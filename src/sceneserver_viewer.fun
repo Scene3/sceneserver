@@ -28,7 +28,7 @@ site sceneserver {
         
             canvas_id = s.name + "_canvas"
 
-            include_scripts[] = [ "/js/lib/three.js", "/js/lib/stats.js" ]
+            include_scripts[] = [ "/js/libs/three.js", "/js/libs/stats.js" ]
     
             sub_script [|
                 stats = new Stats();

@@ -1,0 +1,44 @@
+/**
+ *  sample.world -- sample world file for use with sceneserver
+ *
+ **/
+
+world sample {
+
+    adopt three
+    
+    initial_scene_name = "home"
+    
+    /--- materials ---/
+
+    phong_material blue_material {
+        undecorated color = 0x3333CC
+    }
+    
+    
+    /--- objects ---/
+    
+    scene home {
+            mesh(cube_geometry(7, 7, 7), blue_material) blue_cube {
+                position pos = position(0, 2, 0)
+                on_drag {
+                    log("blue_cube.on_drag called");
+                }
+            }
+
+            point_light(0xAAAAAA) soft_light {
+                position pos = position(0, 12, 40)
+            }
+
+            three_object[] objs = [
+                blue_cube,
+                soft_light
+            ]
+            
+            javascript next_frame {
+                blue_cube.rotate(0.002, -0.002, -0.001);
+            }
+    
+    }
+
+}

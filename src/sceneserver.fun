@@ -142,16 +142,16 @@ site sceneserver {
 
     /---- pseudofiles ----/
 
-    public js {
-        lib {
+    js {
+        libs {
             three {
                 public js {
-                    include_file("../3p/lib/three.js");
+                    include_file("../3p/js/libs/three.js");
                 }
             }
             stats {
                 public js {
-                    include_file("../3p/lib/stats.min.js");
+                    include_file("../3p/js/libs/stats.min.js");
                 }
             }
         }
