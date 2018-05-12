@@ -1,0 +1,52 @@
+/**
+ *  skydome.world 
+ *
+ **/
+
+world skydome {
+
+    adopt three
+    
+    initial_scene_name = "home"
+    
+    /--- materials ---/
+
+    phong_material blue_material {
+        undecorated color = 0x3333CC
+    }
+    
+    
+    /--- objects ---/
+    
+    phong_material sky_dome_material {
+        int side = BACK_SIDE
+        float opacity = 0.5
+        boolean transparent = true
+        undecorated map = load_texture("worlds/skydome/images/sky_tryker_night_fair.png")
+    }
+    
+    mesh(sphere_geometry(800, 64, 32), sky_dome_material) sky_dome {
+        position pos = position(0, -100, 0)
+        rotation rot = rotation(0, 0, 0.5 * 3.14159)
+    }
+
+    
+    /--- lights ---/
+
+    point_light(0xAAAAAA) soft_light {
+        position pos = position(0, 12, 40)
+    }
+
+
+    scene home {
+        three_object[] objs = [
+            sky_dome,
+            soft_light
+        ]
+            
+        javascript next_frame {
+            sky_dome.rotate(0, 0.00005, 0);
+        }
+    }
+
+}

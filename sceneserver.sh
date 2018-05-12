@@ -5,5 +5,5 @@
 
 SERVICE_HOME=$PWD
 SERVICE_NAME="sceneserver"
-FUN_HOME="../funlang"
-source ../funlang/bin/funserver.sh
+CANTO_HOME="../canto"
+source ../canto/bin/cantoserver.sh

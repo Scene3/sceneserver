@@ -1,5 +1,5 @@
 /--
- --   config.fun
+ --   config.canto
  --/
 
 {
@@ -37,7 +37,7 @@
     /--- configuration variables queried by the server ---/
     file_base = main_site.filepath
     boolean files_first = main_site.files_first
-    funpath = main_site.funpath
+    cantopath = main_site.cantopath
     sitename = main_site.name
     sitepath = main_site.sitepath
     
@@ -46,7 +46,7 @@
     /** A generic website configuration. **/
     site_config {
         name [?]
-        funpath [?]
+        cantopath [?]
         boolean recursive = false;
 
         filepath = "."
@@ -64,7 +64,7 @@
 
     site_config sceneserver_config {
         name = "sceneserver"
-        funpath = "src:example:../three/src"
+        cantopath = "src:example:../three/src"
     }    
 
     /** The site config table allows lookup of site configuration by name.  It is

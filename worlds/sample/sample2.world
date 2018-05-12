@@ -4,8 +4,6 @@
  **/
 
 world sample {
-
-    adopt three
     
     initial_scene_name = "home"
     

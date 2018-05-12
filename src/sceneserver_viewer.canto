@@ -3,7 +3,7 @@
  --
  -- The base UI module for sceneserver.
  --
- -- Copyright (c) 2013-2014 by Michael St. Hippolyte
+ -- Copyright (c) 2013-2017 by Michael St. Hippolyte
  --
  --/
  
@@ -59,7 +59,8 @@ site sceneserver {
         for three_object o in current_scene.pointable_objs {
             log("            ..." + o.name);
         }
-            
+        
+        sub;
     }        
 
 }

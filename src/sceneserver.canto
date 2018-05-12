@@ -32,7 +32,13 @@ site sceneserver {
         log("scenserver.session_init called");
     }
 
-
+    /** base type for external access to scene data **/
+    dynamic scene world(nm) {
+        name = nm
+        retrieved_scene(name);
+    }
+        
+    
     page(params) sceneserver_basepage(params{}),(path, params{}) {
         viewport [| width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0 |]
 
@@ -58,6 +64,11 @@ site sceneserver {
     
     /-- request types --/
     
+    req world_req {
+        name = "world"
+        get(nm) = get_scene(nm)
+    }
+
     req scene_req {
         name = "scene"
         get(nm) = get_scene(nm)
@@ -81,10 +92,16 @@ site sceneserver {
     req info_req {
         name = "info";
         get(nm) = "<h2>Sceneserver " + version + "<br>Open server for multiuser, interconnected 3D content.</h2>"
+    }
+    
+    req unknown_req(req_type) {
+        name = "unknown enitity request"
+        rt = req_type ? req_type : "entity"
+        get(nm) = "<h2>Error</h2><p><b>Unknown " + rt + " requested: " + nm + "</b><p>"
     }    
 
     /-- request constructor table --/
-    req[] supported_reqs = [ scene_req, agent_req, prop_req, info_req, page_req ] 
+    req[] supported_reqs = [ world_req, agent_req, prop_req, info_req, page_req ] 
     req{} req_types = { for req r in supported_reqs {
                             r.name: r
                         }
@@ -93,17 +110,16 @@ site sceneserver {
     public global response index(request r) {
         scene_viewer(initial_scene_name);
     }
-    public dynamic response general_response(r_path),(r_name, request r) {
+    
+    public dynamic response general_response(r_path),(r_path, request r) {
         title = "sceneserver"
 
-        path = (r_path ? r_path : r.path_info)
-        npath = (starts_with(path, "/") ? substring(path, 1) : path)
-            
-        int ix = last_index_of(npath, "/")
-        rname = (ix < 0 ? npath : substring(npath, ix + 1))
-        rtype = (ix > 0 ? substring(npath, 0, ix) : "")
 
-        req rq = req_types[rtype]
+        int ix = last_index_of(r_path, ".")
+        rname = (ix < 0 ? r_path : substring(r_path, ix + 1))
+        rtype = (ix > 0 ? substring(r_path, 0, ix) : "world")
+
+        req rq = req_types[rtype] ?? req_types[rtype] : unknown_req(rtype)
 
         rq.get(rname);
     }
