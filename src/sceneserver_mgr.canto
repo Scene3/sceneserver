@@ -1,5 +1,5 @@
 /---------------------
- -- sceneserver_mgr.fun
+ -- sceneserver_mgr.canto
  --
  -- The scene manager module for sceneserver.
  --
@@ -14,23 +14,23 @@ site sceneserver {
     /** Global cache for world models from which content is obtained.  Content may include
      *  scenes, objects and other resources.  
      **/
-    global fun_domain{} all_domains = {}
+    global canto_domain{} all_domains = {}
     
     /** Global main world name  **/
     global world_domain_name(nm) = nm
 
-    dynamic fun_domain add_domain(domain_name, fun_domain dom) {
-        keep by domain_name in all_domains: fun_domain new_domain = dom
+    dynamic canto_domain add_domain(domain_name, canto_domain dom) {
+        keep by domain_name in all_domains: canto_domain new_domain = dom
         new_domain;
     }
 
     /** Global world model.  All primary scenes are retrieved from this model. **/ 
-    global fun_domain world_domain = all_domains[world_domain_name]
-    global fun_context world_context = world_domain.context
+    global canto_domain world_domain = all_domains[world_domain_name]
+    global canto_context world_context = world_domain.context
     global initial_scene_name = world_context.construct("initial_scene_name")
 
     /** Initialization of global world model. **/
-    dynamic fun_domain domain_from_file(name, path) = this_domain.child_domain(name, "world", path, "*.world", true)
+    dynamic canto_domain domain_from_file(name, path) = this_domain.child_domain(name, "world", path, "*.world", true)
 
     dynamic load_world(name, path) {
         add_domain(name, domain_from_file(name, path));
